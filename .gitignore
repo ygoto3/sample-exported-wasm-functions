@@ -1,0 +1,6 @@
+# Generated static files
+wasm/
+
+# OS X files
+.DS_Store
+Thumbs.db

@@ -1,0 +1,45 @@
+<!doctype html>
+<html lang="en">
+<meta charset="utf-8" />
+<title>Sample Exported Wasm Functions</title>
+<h1>Sample Exported Wasm Functions</h1>
+<script src="wasm/arithmetic_operators.js"></script>
+<script>
+
+fetch('wasm/arithmetic_operators.wasm')
+  .then(response => response.arrayBuffer())
+  .then(arrayBuffer => new Uint8Array(arrayBuffer))
+  .then(wasmBinary => {
+    var module;
+    const moduleArgs = {
+      wasmBinary,
+      onRuntimeInitialized() {
+        const add = module.cwrap('add', 'number', ['number', 'number']);
+        const subtract = module.cwrap('subtract', 'number', ['number', 'number']);
+        const multiply = module.cwrap('multiply', 'number', ['number', 'number']);
+        const divide = module.cwrap('divide', 'number', ['number', 'number']);
+
+        console.log('add(2, 3) => ', add(2, 3));
+        write('add(2, 3) => ' + add(2, 3));
+
+        console.log('subtract(10, 3) => ', subtract(10, 3));
+        write('subtract(10, 3) => ' + subtract(10, 3));
+
+        console.log('multiply(8, 9) => ', multiply(8, 9));
+        write('multiply(8, 9) => ' + multiply(8, 9));
+
+        console.log('divide(5, 4) => ', divide(5, 4));
+        write('divide(5, 4) => ' + divide(5, 4));
+      }
+    };
+    module = Module(moduleArgs);
+  });
+
+function write(text) {
+  const p = document.createElement('p');
+  p.innerText = text;
+  document.body.appendChild(p);
+}
+
+</script>
+</html>
